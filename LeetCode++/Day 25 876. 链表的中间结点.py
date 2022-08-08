@@ -26,3 +26,17 @@ class Solution:
             head = head.next
 
         return head
+
+
+class Solution:
+    def middleNode(self, head: ListNode) -> ListNode:
+        if head:
+            slow, fast = head, head
+            while (fast and fast.next):
+                slow = slow.next
+                fast = fast.next.next
+
+            return slow
+        return None
+
+
