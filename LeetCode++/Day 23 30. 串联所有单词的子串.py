@@ -6,9 +6,8 @@ from typing import List
 
 
 class Solution:
-    def findSubstring(self, s: str, twords: List[str]) -> List[int]:
-        words = "".join(twords)
-        flag = True
+    def findSubstring(self, s: str, words: List[str]) -> List[int]:
+        t_words = "".join(words)
         a_list = []
         len_words = len(words)
         len_words_let = len(words[0])
@@ -17,28 +16,63 @@ class Solution:
         win_dict = {}
         if len_words == 0:
             return None
-        for word in words:
-            words_dict[word] = words_dict.get(word, 0) + 1
 
-        left, right = 0, 0
-        while right < s_len:
+        # 获取words的字母频数
+        for char in t_words:
+            words_dict[char] = words_dict.get(char, 0) + 1
 
-            char = s[right]
-            win_dict[char] = win_dict.get(char, 0) + 1
-            right += 1
+        left, right = 0, len(t_words)
+        while right <= s_len:
+            win_dict = {}
+            temp_list = s[left:right]
 
-            if char not in words_dict.keys() or win_dict[char] > words_dict[char]:
-                left += 1
-
-            for i in words_dict.keys():
-                if win_dict[i] == words_dict[i]:
-                    flag = True
-                else:
-                    flag = False
+            for index, char in enumerate(temp_list):
+                win_dict[char] = win_dict.get(char, 0) + 1
+                if char not in words_dict:
+                    left += (index+1)
+                    right += (index+1)
                     break
-            if flag:
-                a_list.append(left)
+                elif win_dict[char] > words_dict[char]:
+                    left += 1
+                    right += 1
+                    break
+            else:
+                for char in win_dict.keys():
+                    if win_dict[char] < words_dict[char]:
+                        left += 1
+                        right += 1
+                        break
+                else:
+                    b_list = []
+                    for i in range(len_words):
+                        b_list.append(temp_list[len_words_let*i:len_words_let*(i+1)])
+                    for i in words:
+                        if i not in b_list:
+                            left += 1
+                            right += 1
+                            break
+                        else:
+                            b_list.remove(i)
 
+                    else:
+
+                        a_list.append(left)
+                        left += 1
+                        right += 1
         return a_list
+
+
+
+# s = "wordgoodgoodgoodbestword"
+# words = ["word", "good", "best", "good"]
+
+s = "abababab"
+words = ["ab","ab","ab"]
+t = Solution()
+a = t.findSubstring(s, words)
+print(a)
+
+
+
 
 
