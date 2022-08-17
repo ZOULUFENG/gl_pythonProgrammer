@@ -12,9 +12,11 @@ class Solution:
 
         for i in range(len_nums):
 
-            while mydeque and nums[mydeque[-1]] < nums[i]: mydeque.pop()
-            while mydeque and mydeque[0] <= i - k: mydeque.popleft()
+            while mydeque and nums[mydeque[-1]] < nums[i]:
+                mydeque.pop()
             mydeque.append(i)
+            while mydeque and mydeque[0] <= i - k: mydeque.popleft()
+
             if i >= k - 1:
                 a_list.append(nums[mydeque[0]])
 
